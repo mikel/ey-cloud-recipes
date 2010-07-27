@@ -4,8 +4,6 @@
 #
 # Configuration settings
 
-if ['solo', 'util'].include?(node[:instance_role])
-
   package "mail-mta/ssmtp" do
     action :remove
     ignore_failure true
@@ -53,10 +51,17 @@ if ['solo', 'util'].include?(node[:instance_role])
     action :install
   end
 
+  execute "symlink ssmtp" do
+    command "cd /;ln -sfv /usr/sbin/exim /usr/sbin/ssmtp"
+  end
+
+  execute "ssmtp fixes" do
+    command "mkdir -p /etc/ssmtp && touch /etc/ssmtp/ssmtp.conf"
+  end
+
   execute "ensure-exim-is-running" do
     command %Q{
      /etc/init.d/exim start
     }
     not_if "pgrep exim"
   end
-end
