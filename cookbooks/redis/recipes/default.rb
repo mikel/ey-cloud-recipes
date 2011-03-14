@@ -11,12 +11,12 @@ execute "set_overcommit_memory" do
 end
 
 enable_package "dev-db/redis" do
-  version "2.0.1"
+  version "2.0.4"
 end
 
 package "dev-db/redis" do
-  version "2.0.1"
-  action :install
+  version "2.0.4"
+  action :upgrade
 end
 
 directory "/data/redis" do
@@ -24,6 +24,7 @@ directory "/data/redis" do
   group 'redis'
   mode 0755
   recursive true
+  action :create
 end
 
 template "/etc/redis_util.conf" do
